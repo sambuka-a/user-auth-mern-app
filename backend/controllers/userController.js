@@ -11,6 +11,7 @@ const registerUser = asyncHandler (async (req, res) => {
   const {name, email, password} = req.body
 
   if(!name || !email || !password) {
+    res.status(400)
     throw new Error("Please fill all required fields")
   }
 
@@ -35,9 +36,9 @@ const registerUser = asyncHandler (async (req, res) => {
 
   if(user) {
     res.status(201).json({
-      _id: user.id,
-      name: user.name,
-      email: user.email,
+      //_id: user.id,
+      //name: user.name,
+      //email: user.email,
       token: generateToken(user._id),
     })
   } else {
@@ -69,16 +70,10 @@ const loginUser = asyncHandler(async (req, res) => {
 })
 
 //Get user data
-// @route   GET /api/users/me
+// @route   GET /api/users/getUSer
 // @access  Private
 const getUserData = asyncHandler (async (req, res) => {
-  const{_id, name, email} = await User.findById(req.user.id)
-
-  res.status(200).json({
-    id: _id,
-    name,
-    email,
-  })
+  res.status(200).json(req.user)
 })
 
 //Generate JWT
